@@ -133,7 +133,7 @@ fn draw(t: &mut Terminal<TermionBackend>, app: &App) {
                 .sizes(&[Size::Percent(50), Size::Percent(50)])
                 .render(t, &chunks[0], |t, chunks| {
                     Donut::default()
-                        .style(Style::default().fg(Color::Yellow))
+                        .fg(Color::Yellow)
                         .label_style(Style::default().fg(Color::Cyan))
                         .percent(app.progress1)
                         .label("EXT")
@@ -155,19 +155,19 @@ fn draw(t: &mut Terminal<TermionBackend>, app: &App) {
                 .margin(1)
                 .render(t, &chunks[1], |t, chunks| {
                     Donut::default()
-                        .style(Style::default().fg(Color::Cyan))
+                        .fg(Color::LightCyan)
                         .percent(app.progress3)
                         .label("FAN1")
                         .label_style(Style::default().fg(Color::Cyan))
                         .render(t, &chunks[0]);
                     Donut::default()
-                        .style(Style::default().fg(Color::Cyan))
+                        .fg(Color::LightCyan)
                         .percent(app.progress4)
                         .label("FAN2")
                         .label_style(Style::default().fg(Color::Cyan))
                         .render(t, &chunks[1]);
                 });
         });
-
+;
     t.draw().unwrap();
 }
