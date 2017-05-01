@@ -119,36 +119,54 @@ fn draw(t: &mut Terminal<TermionBackend>, app: &App) {
 
     Group::default()
         .direction(Direction::Horizontal)
-        .margin(2)
-        .sizes(&[Size::Percent(25), Size::Percent(25), Size::Percent(25), Size::Percent(25)])
+        .margin(1)
+        .sizes(&[Size::Percent(50), Size::Percent(50)])
         .render(t, &size, |t, chunks| {
-            Donut::default()
-                .block(Block::default().title("Donut1").borders(border::ALL))
-                .style(Style::default().fg(Color::Yellow))
-                .label_style(Style::default().fg(Color::Cyan))
-                .percent(app.progress1)
-                .label("EXT")
+            Block::default()
+                .borders(border::ALL)
+                .title("Temperature")
                 .render(t, &chunks[0]);
-            Donut::default()
-                .block(Block::default().title("Donut2").borders(border::ALL))
-                .percent(app.progress2)
-                .label("BED")
-                .label_style(Style::default().fg(Color::Cyan))
+
+            Group::default()
+                .direction(Direction::Horizontal)
+                .margin(1)
+                .sizes(&[Size::Percent(50), Size::Percent(50)])
+                .render(t, &chunks[0], |t, chunks| {
+                    Donut::default()
+                        .style(Style::default().fg(Color::Yellow))
+                        .label_style(Style::default().fg(Color::Cyan))
+                        .percent(app.progress1)
+                        .label("EXT")
+                        .render(t, &chunks[0]);
+                    Donut::default()
+                        .percent(app.progress2)
+                        .label("BED")
+                        .label_style(Style::default().fg(Color::Cyan))
+                        .render(t, &chunks[1]);
+                });
+            Block::default()
+                .borders(border::ALL)
+                .title("Cooling")
                 .render(t, &chunks[1]);
-            Donut::default()
-                .block(Block::default().title("Donut2").borders(border::ALL))
-                .style(Style::default().fg(Color::Cyan))
-                .percent(app.progress3)
-                .label("FAN1")
-                .label_style(Style::default().fg(Color::Cyan))
-                .render(t, &chunks[2]);
-            Donut::default()
-                .block(Block::default().title("Donut3").borders(border::ALL))
-                .style(Style::default().fg(Color::Cyan))
-                .percent(app.progress4)
-                .label("FAN2")
-                .label_style(Style::default().fg(Color::Cyan))
-                .render(t, &chunks[3]);
+
+            Group::default()
+                .direction(Direction::Horizontal)
+                .sizes(&[Size::Percent(50), Size::Percent(50)])
+                .margin(1)
+                .render(t, &chunks[1], |t, chunks| {
+                    Donut::default()
+                        .style(Style::default().fg(Color::Cyan))
+                        .percent(app.progress3)
+                        .label("FAN1")
+                        .label_style(Style::default().fg(Color::Cyan))
+                        .render(t, &chunks[0]);
+                    Donut::default()
+                        .style(Style::default().fg(Color::Cyan))
+                        .percent(app.progress4)
+                        .label("FAN2")
+                        .label_style(Style::default().fg(Color::Cyan))
+                        .render(t, &chunks[1]);
+                });
         });
 
     t.draw().unwrap();

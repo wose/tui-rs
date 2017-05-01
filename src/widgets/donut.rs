@@ -66,6 +66,17 @@ impl<'a> Donut<'a> {
 
 impl<'a> Widget for Donut<'a> {
     fn draw(&self, area: &Rect, buf: &mut Buffer) {
+        let area = match self.block {
+            Some(ref block) => {
+                block.draw(area, buf);
+                block.inner(area)
+            }
+            None => *area,
+        };
+        if area.height < 1 {
+            return;
+        }
+
         let width = 30;
         let radius = 50;
         let canvas_x = 100;
@@ -87,13 +98,13 @@ impl<'a> Widget for Donut<'a> {
                         continue;
                     }
 
-                    let slice = 2.0 * PI / 370.0;
-                    for point in 0..370u16 {
+                    let slice = 2.0 * PI / 360.0;
+                    for point in 0..361u16 {
                         let si = point as f64 - 90.0;
                         let a = slice * si;
                         let x = center_x as f64 + s as f64 * a.cos();
                         let y = center_y as f64 + s as f64 * a.sin();
-                        if !first_point && point as f64 <= self.percent as f64 * 3.6 {
+                        if !first_point && self.percent > 0 && point as f64 <= self.percent as f64 * 3.6 {
                             ctx.draw(&Line {
                                 x1: last_x.round(),
                                 y1: last_y.round(),
