@@ -1,4 +1,5 @@
 mod block;
+mod donut;
 mod paragraph;
 mod list;
 mod gauge;
@@ -10,6 +11,7 @@ mod table;
 pub mod canvas;
 
 pub use self::block::Block;
+pub use self::donut::Donut;
 pub use self::paragraph::Paragraph;
 pub use self::list::{List, SelectableList};
 pub use self::gauge::Gauge;
