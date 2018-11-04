@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 mod line;
 mod map;
 mod points;
@@ -35,7 +37,7 @@ pub trait Shape<'a> {
 pub struct Label<'a> {
     pub x: f64,
     pub y: f64,
-    pub text: &'a str,
+    pub text: Cow<'a, str>,
     pub color: Color,
 }
 
@@ -117,8 +119,8 @@ impl<'a> Context<'a> {
     }
 
     /// Print a string on the canvas at the given position
-    pub fn print(&mut self, x: f64, y: f64, text: &'a str, color: Color) {
-        self.labels.push(Label { x, y, text, color });
+    pub fn print<D: Into<Cow<'a, str>>>(&mut self, x: f64, y: f64, text: D, color: Color) {
+        self.labels.push(Label { x, y, text: text.into(), color });
     }
 
     /// Push the last layer if necessary
@@ -285,10 +287,11 @@ where
                     / (self.y_bounds[1] - self.y_bounds[0])) as u16;
                 let dx = ((label.x - self.x_bounds[0]) * f64::from(canvas_area.width - 1)
                     / (self.x_bounds[1] - self.x_bounds[0])) as u16;
+
                 buf.set_string(
                     dx + canvas_area.left(),
                     dy + canvas_area.top(),
-                    label.text,
+                    &label.text,
                     style.fg(label.color),
                 );
             }
